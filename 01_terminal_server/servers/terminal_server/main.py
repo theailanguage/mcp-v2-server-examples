@@ -1,7 +1,18 @@
 import os
+import sys
+import logging
 from dotenv import load_dotenv
 # Import the MCPServer class from the MCP SDK.
 from mcp.server.mcpserver import MCPServer
+
+# Configure logging to output to stderr. 
+# This is crucial for MCP servers as stdout is used for JSON-RPC communication.
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    stream=sys.stderr
+)
+logger = logging.getLogger("terminal_server")
 
 # Load environment variables from a .env file if it exists.
 # This is useful for local development and for setting the TERMINAL_WORKSPACE.
@@ -27,7 +38,7 @@ def main():
 
     # 3. Start the server.
     # Stdio stands for "Standard Input/Output".
-    print("Terminal MCP Server starting...", flush=True)
+    logger.info("Terminal MCP Server starting...")
     server.run(transport='stdio')
 
 # The following block ensures that main() only runs if this file is executed directly.
