@@ -1,5 +1,7 @@
 # Terminal MCP Server
 
+[⬅ Back to Root](../../README.md)
+
 Welcome to the **Terminal MCP Server**! This project is a basic example of how to build a Model Context Protocol (MCP) server that allows an AI (like Claude) to interact with your computer's terminal.
 
 ## 🎓 Learning Objectives
@@ -16,10 +18,10 @@ Welcome to the **Terminal MCP Server**! This project is a basic example of how t
 - **Claude Desktop** installed (if you want to use the GUI).
 
 ### 2. Installation
-First, clone this repository or download the files. Then, install the required `mcp` library using pip:
+Ensure you have installed the requirements from the [root directory](../../requirements.txt):
 
 ```bash
-pip install mcp
+pip install -r ../../requirements.txt
 ```
 
 ### 3. Configuration (Connecting to Claude)
