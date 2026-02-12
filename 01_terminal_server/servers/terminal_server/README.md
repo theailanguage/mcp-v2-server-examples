@@ -8,6 +8,7 @@ Welcome to the **Terminal MCP Server**! This project is a basic example of how t
 - Understand how to structure an MCP server in Python.
 - Learn how to use the `MCPServer` class to register tools automatically.
 - Learn how to connect an MCP server to Claude Desktop using the `stdio` transport.
+- Use `uv` for modern Python project management.
 
 ---
 
@@ -24,14 +25,17 @@ Executes a shell command within the configured workspace and returns its output 
 
 ### 1. Prerequisites
 - **Python 3.10 or higher** installed on your machine.
+- **[uv](https://docs.astral.sh/uv/)** installed (highly recommended for environment management).
 - **Claude Desktop** installed (if you want to use the GUI).
 
 ### 2. Installation
-Ensure you have installed the requirements from the [root directory](../../requirements.txt):
+We use `uv` to manage dependencies. From the root directory, run:
 
 ```bash
-pip install -r ../../requirements.txt
+uv sync
 ```
+
+This will create a virtual environment and install all necessary dependencies.
 
 ### 3. Workspace Configuration
 The server restricts command execution to a specific directory. By default, it uses a `./workspace` folder or the current directory.
@@ -43,8 +47,14 @@ Update your `claude_desktop_config.json` to include the `env` key:
 {
   "mcpServers": {
     "terminal-server": {
-      "command": "python",
-      "args": ["/PATH/TO/YOUR/servers/terminal_server/main.py"],
+      "command": "uv",
+      "args": [
+        "--directory",
+        "/PATH/TO/YOUR/servers/terminal_server",
+        "run",
+        "python",
+        "main.py"
+      ],
       "env": {
         "TERMINAL_WORKSPACE": "/path/to/your/desired/workspace"
       }
@@ -63,10 +73,10 @@ TERMINAL_WORKSPACE=./workspace
 The server will automatically load this variable on startup using `python-dotenv`.
 
 ### 4. Running the Server
-To run the server manually (usually for testing via stdio):
+To run the server manually using `uv`:
 
 ```bash
-python servers/terminal_server/main.py
+uv run python servers/terminal_server/main.py
 ```
 
 ### 5. Configuration (Connecting to Claude)
@@ -84,7 +94,7 @@ Open the file in a text editor and add the entry to the `mcpServers` object as s
 Before connecting to Claude, you can test if the server works using the **MCP Inspector**:
 
 ```bash
-npx @modelcontextprotocol/inspector python /PATH/TO/YOUR/servers/terminal_server/main.py
+npx @modelcontextprotocol/inspector uv run python servers/terminal_server/main.py
 ```
 
 ---
@@ -106,7 +116,8 @@ This server allows the AI to run **any** command on your computer within the wor
 
 ## 🛠 How it Works
 The server uses the **STDIO (Standard Input/Output)** transport. 
-1. Claude Desktop starts the Python script as a background process.
+1. Claude Desktop starts the Python script as a background process using `uv run`.
 2. Claude sends JSON-RPC messages to the script's `stdin`.
 3. The `MCPServer` instance handles these messages and calls the `execute_command` tool.
 4. The output of the command is sent back to Claude via `stdout`.
+5. Logs are sent to `stderr` to avoid corrupting the communication channel.
