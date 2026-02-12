@@ -16,12 +16,22 @@ This repository follows a hierarchical structure for better organization of MCP 
 
 ### Prerequisites
 - Python 3.10+
-- `pip` (Python package installer)
+- **[uv](https://docs.astral.sh/uv/)** (Recommended)
 
-### Installation
+### Development Environment
+We recommend using `uv` for managing the Python environment and dependencies. It is significantly faster and more reliable than standard `pip`.
 
+#### Installation with UV
 1. Clone the repository.
 2. Install the required dependencies:
+   ```bash
+   uv sync
+   ```
+
+#### Installation with Pip
+If you prefer not to use `uv`:
+1. Clone the repository.
+2. Install the dependencies:
    ```bash
    pip install -r requirements.txt
    ```
@@ -41,6 +51,12 @@ Root
 ## 📚 Documentation
 
 Detailed documentation for each server can be found in their respective directories. For the terminal server, refer to [servers/terminal_server/README.md](servers/terminal_server/README.md).
+
+### Example: Running the Terminal Server
+To run the terminal server using `uv`:
+```bash
+uv run python servers/terminal_server/main.py
+```
 
 ## ⚖️ License and Attributions
 
