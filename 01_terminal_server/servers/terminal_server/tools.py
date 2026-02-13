@@ -38,6 +38,7 @@ def execute_command(command: str) -> str:
     # sanitize the 'command' string to prevent command injection attacks.
     # For this educational example, we execute the command as provided.
     
+    
     try:
         # We use subprocess.run to execute the command.
         # - shell=True: Allows us to pass the command as a string.
