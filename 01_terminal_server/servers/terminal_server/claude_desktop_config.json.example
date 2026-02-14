@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "terminal-server": {
+      "command": "python3",
+      "args": ["<PROJECT_PATH>/mcp-server-examples/01_terminal_server/servers/terminal_server/main.py"],
+      "env": {
+        "TERMINAL_WORKSPACE": "<PROJECT_PATH>/mcp-server-examples/01_terminal_server/servers/terminal_server/workspace"
+      }
+    }  
+  }
+}
