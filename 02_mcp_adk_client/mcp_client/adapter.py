@@ -1,14 +1,26 @@
 import asyncio
 import json
+import re
 from typing import Any, Callable, Dict, List
 import mcp.types as types
 
 def create_adk_tool(tool: types.Tool, manager: Any) -> Callable:
     """
     Creates a proxy function compatible with Google ADK from an MCP Tool.
+    
+    Args:
+        tool: The MCP Tool definition.
+        manager: The MCPClientManager instance to use for calls.
     """
-    name = tool.name
+    original_name = tool.name
     description = tool.description or ""
+    
+    # Sanitize name for Python identifier compatibility
+    # ADK/Pydantic validation often requires valid identifiers for names.
+    sanitized_name = re.sub(r'[^a-zA-Z0-9_]', '_', original_name)
+    if not sanitized_name[0].isalpha() and sanitized_name[0] != '_':
+        sanitized_name = '_' + sanitized_name
+
     # Include the schema in the docstring to help the LLM understand the parameters
     schema_str = json.dumps(tool.inputSchema, indent=2)
     
@@ -20,7 +32,8 @@ def create_adk_tool(tool: types.Tool, manager: Any) -> Callable:
         kwargs.pop('tool_context', None)
         
         try:
-            result = await manager.call_tool(name, kwargs)
+            # We use the original_name here because the server expects it
+            result = await manager.call_tool(original_name, kwargs)
             response_text = ""
             for block in result.content:
                 if block.type == 'text':
@@ -33,7 +46,7 @@ def create_adk_tool(tool: types.Tool, manager: Any) -> Callable:
             return {"error": str(e)}
 
     # Set metadata for ADK
-    mcp_proxy_tool.__name__ = name
+    mcp_proxy_tool.__name__ = sanitized_name
     # We combine description and schema in the docstring.
     # Google ADK uses the docstring for the tool's description in the model's tool definition.
     mcp_proxy_tool.__doc__ = f"{description}\n\nParameters Schema:\n{schema_str}"

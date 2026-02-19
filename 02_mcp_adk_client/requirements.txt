@@ -1,5 +1,5 @@
-mcp
-google-adk
+mcp>=1.2.0
+google-adk>=0.1.0
 rich
 anyio
 python-dotenv

@@ -13,7 +13,7 @@ from rich.logging import RichHandler
 
 from mcp_client.manager import MCPClientManager
 from mcp_client.adapter import adapt_tools
-from google.adk.agents.llm_agent import Agent
+from google.adk.agents import LlmAgent
 
 # Load environment variables (like GOOGLE_API_KEY) from .env file
 load_dotenv()
@@ -68,9 +68,9 @@ async def main():
         
         # Initialize ADK Agent
         console.print("[cyan]Initializing Google ADK Agent...[/cyan]")
-        agent = Agent(
+        agent = LlmAgent(
             model="gemini-2.0-flash",
-            name="MCP-ADK-Agent",
+            name="mcp_adk_agent",
             instruction="You are a helpful assistant that uses the provided tools from MCP servers to answer user queries.",
             tools=adk_tools
         )
