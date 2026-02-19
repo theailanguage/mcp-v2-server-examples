@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "terminal": {
+      "command": "python",
+      "args"["C:\\<PROJECT_PATH>\\mcp-v2-server-examples\\01_terminal_server\\servers\\terminal_server\\main.py"],
+    }
+  }
+}
+
