@@ -2,10 +2,10 @@
 This is an example Model Context Protocol (MCP) server that provides a simple echo tool and status resource.
 
 The Model Context Protocol (MCP) is an open standard that enables AI models to interact with external tools and data sources.
-This server uses the MCPServer framework, which provides a high-level, ergonomic interface for building MCP servers.
+This server uses the FastMCP framework, which provides a high-level, ergonomic interface for building MCP servers.
 
 Key concepts demonstrated in this file:
-1.  **MCPServer Initialization**: Creating a named server instance.
+1.  **FastMCP Initialization**: Creating a named server instance.
 2.  **Tool Registration**: Exposing functions as tools that an AI agent (like a Gemini model) can call.
 3.  **Resource Registration**: Providing read-only data (like status information) via a standard URI format.
 4.  **Protocol-Safe Logging**: Using stderr for logging to avoid interfering with the JSON-RPC communication on stdout.
@@ -13,7 +13,7 @@ Key concepts demonstrated in this file:
 
 import logging
 import sys
-from mcp.server.mcpserver import MCPServer
+from mcp.server.fastmcp.server import FastMCP
 from .tools import echo
 from .resources import connection_status
 
@@ -31,19 +31,18 @@ logging.basicConfig(
 logger = logging.getLogger("echo-server")
 
 # --- SERVER INITIALIZATION ---
-# We initialize the MCPServer with a descriptive name.
+# We initialize the FastMCP with a descriptive name.
 # This name helps identify the server in logs and when multiple servers are connected to a client.
-# MCPServer is the preferred class for creating feature-rich servers easily.
-server = MCPServer("echo-server")
+mcp = FastMCP("echo-server")
 
 # --- TOOL REGISTRATION ---
 # A 'tool' is a function that the AI agent can decide to call when it needs external information or actions.
-# The `@server.tool()` decorator registers the following function as an MCP tool.
+# The `@mcp.tool()` decorator registers the following function as an MCP tool.
 # The docstring and type hints are CRITICAL: the AI model uses them to understand:
 # - What the tool does (the docstring)
 # - What parameters it needs (the arguments and their types)
 # Students: The LLM 'reads' your docstrings to decide if this tool is useful!
-@server.tool()
+@mcp.tool()
 def echo_tool(text: str) -> str:
     """
     Echoes the input text back to the caller.
@@ -61,9 +60,9 @@ def echo_tool(text: str) -> str:
 # --- RESOURCE REGISTRATION ---
 # A 'resource' is a piece of data that the AI agent can read, but not modify.
 # Resources are identified by URIs (Uniform Resource Identifiers).
-# The `@server.resource()` decorator registers a function that returns the content of the resource.
+# The `@mcp.resource()` decorator registers a function that returns the content of the resource.
 # Students: Think of resources like 'files' or 'URLs' that the agent can open to get context.
-@server.resource("resource://echo/status")
+@mcp.resource("resource://echo/status")
 def status_resource() -> str:
     """
     Returns the current connection status of the echo server.
@@ -77,8 +76,8 @@ def status_resource() -> str:
 
 # --- SERVER ENTRY POINT ---
 # This block ensures the server runs when the script is executed directly.
-# The `server.run()` method starts the MCP transport (defaulting to stdio).
+# The `mcp.run()` method starts the MCP transport (defaulting to stdio).
 # 'stdio' transport means the server communicates via standard input and output.
 if __name__ == "__main__":
     logger.info("Starting echo-server using stdio transport...")
-    server.run(transport="stdio")
+    mcp.run(transport="stdio")
