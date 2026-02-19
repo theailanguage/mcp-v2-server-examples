@@ -1,6 +1,6 @@
 import logging
 import sys
-from mcp.server.mcpserver import MCPServer
+from mcp.server.fastmcp.server import FastMCP
 from .tools import echo
 from .resources import connection_status
 
@@ -12,8 +12,8 @@ logging.basicConfig(
 )
 logger = logging.getLogger("echo-server")
 
-# Initialize the MCP Server
-server = MCPServer("echo-server")
+# Initialize the FastMCP Server
+server = FastMCP("echo-server")
 
 @server.tool()
 def echo_tool(text: str) -> str:
