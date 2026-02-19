@@ -97,8 +97,9 @@ async def main():
                     for tool in tools:
                         # Accessing tool metadata. 
                         # Tools in ADK follow standard Python function signatures.
-                        desc = tool.__doc__.split('\n')[0] if tool.__doc__ else "No description"
-                        table.add_row(tool.__name__, desc)
+                        # Fix: use .name and .description for MCPTool objects
+                        desc = tool.description.split('\n')[0] if tool.description else "No description"
+                        table.add_row(tool.name, desc)
                     
                     console.print(table)
                     console.print(f"[green]Successfully connected and loaded {len(tools)} tools from '{name}'.[/green]\n")
