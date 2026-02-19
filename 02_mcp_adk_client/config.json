@@ -3,6 +3,10 @@
     "weather-server": {
       "command": "python",
       "args": ["-m", "weather_server"]
+    },
+    "echo-server": {
+      "command": "python",
+      "args": ["-m", "servers.echo_server.main"]
     }
   }
 }

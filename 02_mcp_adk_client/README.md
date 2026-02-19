@@ -9,6 +9,8 @@ By bridging these two standards, developers can build powerful AI agents that le
 - `mcp_client/`: Contains the core logic for managing MCP sessions and adapting MCP tool schemas into Google ADK-compatible proxy functions.
   - `manager.py`: Handles the lifecycle of MCP server connections via STDIO.
   - `adapter.py`: Translates MCP tool definitions into Python functions that the ADK Agent can invoke.
+- `servers/`: Contains custom MCP server implementations.
+  - `echo_server/`: A simple echo server used for testing.
 - `cmd.py`: The CLI entry point. It initializes the `MCPClientManager`, connects to servers, discovers tools, creates the ADK Agent, and starts an interactive chat loop.
 - `config.json`: Configuration file where you define your MCP servers (command, arguments, and environment variables).
 - `requirements.txt`: Lists the Python dependencies required for the project.
@@ -55,6 +57,10 @@ Update `config.json` to include the MCP servers you want to use. Example:
     "weather-server": {
       "command": "python",
       "args": ["-m", "weather_server"]
+    },
+    "echo-server": {
+      "command": "python",
+      "args": ["-m", "servers.echo_server.main"]
     }
   }
 }
@@ -65,6 +71,9 @@ Start the interactive agent loop using `uv`:
 ```bash
 uv run cmd.py
 ```
+
+### Testing with the Echo Server
+You can test the setup using the included `echo-server`. When running `cmd.py`, the agent should discover the `echo_tool` and be able to use it. You can also query the resource `resource://echo/status` if the agent is configured to handle resources (the current `adapter.py` focuses on tools).
 
 ## Legal & Attribution
 This project integrates multiple open-source technologies. Please refer to the following files for licensing and trademark information:
