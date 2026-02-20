@@ -7,7 +7,6 @@ Additionally, it provides a low-level programmatic interface for direct interact
 
 > **Note:** This project uses **MCP version 1** (and not version 2) because the **Google Agent Development Kit (ADK)** currently supports MCP version 1.
 
-
 ## Directory Structure
 - `servers/`: Contains custom MCP server implementations.
   - `echo_server/`: A simple echo server used for testing.
